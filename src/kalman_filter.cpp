@@ -69,7 +69,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float rho_dot;
   //check division by zero
   if(fabs(rho) < 0.0001){
-	cout << "CalculateRho_dot () - Error - Division by Zero" << endl;
+	
 	rho_dot = 0;
   } else {
 	rho_dot = (x*vx + y*vy)/rho;
