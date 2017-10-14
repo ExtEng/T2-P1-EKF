@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#include <cmath>
 #include <iostream>
 
 using namespace std;
@@ -89,9 +90,12 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     
   VectorXd y_ = z - zpred;
   
-  if( y_(1) > PI_ ) y_(1) -= 2*PI_;
-  if( y_(1) < -PI_ ) y_(1) += 2*PI_;
-  
+  if( y_(1) > M_PI ) {
+	  y_(1) -= 2*M_PI;
+  }
+  if( y_(1) < -M_PI ){
+	  y_(1) += 2*M_PI ;
+  }
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
