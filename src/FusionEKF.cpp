@@ -77,27 +77,29 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
     ekf_.x_ << 1, 1, 1, 1;
-
+	
+	
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
 	  ////Measured cartesian x,y coordinates
-	  ekf_.x_[0] = measurement_pack.raw_measurements_(0)*cos(measurement_pack.raw_measurements_(1));
-	  ekf_.x_[1] = measurement_pack.raw_measurements_(0)*sin(measurement_pack.raw_measurements_(1));
+	  
+	  ekf_.x_(0) = measurement_pack.raw_measurements_[0]*cos(measurement_pack.raw_measurements_[1]);
+	  ekf_.x_(1) = measurement_pack.raw_measurements_[0]*sin(measurement_pack.raw_measurements_[1]);
 	  //Measured cartesian velocities
-	  ekf_.x_[2] = measurement_pack.raw_measurements_(2)*cos(measurement_pack.raw_measurements_(1));
-	  ekf_.x_[3] = measurement_pack.raw_measurements_(2)*sin(measurement_pack.raw_measurements_(1));
+	  ekf_.x_(2) = measurement_pack.raw_measurements_[2]*cos(measurement_pack.raw_measurements_[1]);
+	  ekf_.x_(3) = measurement_pack.raw_measurements_[2]*sin(measurement_pack.raw_measurements_[1]);
 	  
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
-	  ekf_.x_[0] = measurement_pack.raw_measurements_(0);
-	  ekf_.x_[1] = measurement_pack.raw_measurements_(0);
-	  ekf_.x_[2] = 0;
-	  ekf_.x_[3] = 0;
+	  ekf_.x_(0) = measurement_pack.raw_measurements_[0];
+	  ekf_.x_(1) = measurement_pack.raw_measurements_[1];
+	  ekf_.x_(2) = 0;
+	  ekf_.x_(3) = 0;
     }
 	previous_timestamp_ = measurement_pack.timestamp_;
 	
@@ -121,7 +123,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
   previous_timestamp_ = measurement_pack.timestamp_;
-  
+  cout << 'dt: '<< dt << endl;
   ekf_.F_(0,2) = dt;
   ekf_.F_(1,3) = dt;
   
@@ -137,6 +139,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
              dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0,
              0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
 			 
+  cout << 'Q:' << ekf_.Q_ << endl;
   ekf_.Predict();
 
   /*****************************************************************************

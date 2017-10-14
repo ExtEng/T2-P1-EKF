@@ -1,10 +1,10 @@
 #include "kalman_filter.h"
+#include <iostream>
 
 using namespace std;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::vector;
-
 
 // Please note that the Eigen library does not initialize 
 // VectorXd or MatrixXd objects with zeros upon creation.
@@ -31,6 +31,8 @@ void KalmanFilter::Predict() {
   x_ = F_* x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
+  cout << 'Predict: x_: '<< x_ << endl;
+  cout << 'Predict: P_: '<< x_ << endl;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
@@ -47,10 +49,12 @@ void KalmanFilter::Update(const VectorXd &z) {
     
   // New Estimate
   x_ = x_ + K * y_;
-    
+  cout << 'Udpate:x_: '<< x_ << endl;
+  
   int x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
+  cout << 'Udpate:P_: '<< P_ << endl;
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -62,14 +66,18 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   float y = x_(1);
   float vx = x_(2);
   float vy = x_(3);
+  cout << 'UdpateEKF:x_ '<< x_<< endl;
+  
   
   float rho = sqrt(x*x + y*y);
   float theta = atan(y/x);
+  cout << 'UdpateEKF:Rho: '<< rho << endl;
+  cout << 'UdpateEKF:Theta: '<< theta << endl;
   
   float rho_dot;
   //check division by zero
   if(fabs(rho) < 0.0001){
-	
+	cout << 'UdpateEKF:CalculationRho_dot: Error - Division By Zero' << endl;
 	rho_dot = 0;
   } else {
 	rho_dot = (x*vx + y*vy)/rho;
@@ -86,8 +94,10 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     
   // New Estimate
   x_ = x_ + K * y_;
-    
+  cout << 'UdpateEKF: x_: '<< x_ << endl;
+  
   int x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
+  cout << 'UdpateEKF: P_: '<< P_ << endl;
 }
