@@ -70,7 +70,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   
   
   float rho = sqrt(x*x + y*y);
-  float theta = atan2(y/x);
+  float theta = atan2(y,x);
+  
   cout << "UdpateEKF:Rho: "<< rho << endl;
   cout << "UdpateEKF:Theta: "<< theta << endl;
   
@@ -87,6 +88,10 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   zpred << rho, theta, rho_dot;
     
   VectorXd y_ = z - zpred;
+  
+  if( y_(1) > PI_ ) y_(1) -= 2*PI_;
+  if( y_(1) < -PI_ ) y_(1) += 2*PI_;
+  
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
