@@ -51,9 +51,7 @@ FusionEKF::FusionEKF() {
 		0, 0, 1000, 0,
 		0, 0, 0, 1000;
   
-  // Noise values used from the Lectures
-  noise_ax = 9;
-  noise_ay = 9;
+ 
   
 }
 
