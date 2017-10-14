@@ -155,21 +155,21 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-	/*ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+	ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
 	
 	//Use Covariance Matrix for radar measurements
 	ekf_.R_ = R_radar_;
 	
 	ekf_.UpdateEKF(measurement_pack.raw_measurements_);
-	cout << "Update Passed - Radar" << endl;*/
+	cout << "Update Passed - Radar" << endl;
   } else {
     // Laser updates
-	ekf_.H_ = H_laser_;
+	/*ekf_.H_ = H_laser_;
 	//Use Covariance Matrix for laser measurements
 	ekf_.R_ = R_laser_;
 	
 	ekf_.Update(measurement_pack.raw_measurements_);
-	//cout << "Update Passed - Laser" << endl;
+	//cout << "Update Passed - Laser" << endl;*/
   }
 
   // print the output
