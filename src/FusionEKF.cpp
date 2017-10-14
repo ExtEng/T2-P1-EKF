@@ -133,6 +133,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   float dt_2 = dt * dt;
   float dt_3 = dt_2 * dt;
   float dt_4 = dt_3 * dt;
+  
   ekf_.Q_ = MatrixXd(4, 4);
   ekf_.Q_ << (dt_4 / 4) * noise_ax, 0, (dt_3 / 2) * noise_ax, 0,
              0, (dt_4 / 4) * noise_ay, 0, (dt_3 / 2) * noise_ay,
@@ -154,13 +155,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
-	ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+	/*ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
 	
 	//Use Covariance Matrix for radar measurements
 	ekf_.R_ = R_radar_;
 	
 	ekf_.UpdateEKF(measurement_pack.raw_measurements_);
-	cout << "Update Passed - Radar" << endl;
+	cout << "Update Passed - Radar" << endl;*/
   } else {
     // Laser updates
 	ekf_.H_ = H_laser_;
