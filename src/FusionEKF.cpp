@@ -37,19 +37,19 @@ FusionEKF::FusionEKF() {
     * Set the process and measurement noises
   */
   H_laser_<< 1, 0, 0, 0,
-			 0, 1, 0, 0;
+		0, 1, 0, 0;
 	
   ekf_.F_ = MatrixXd(4, 4);
   ekf_.F_ << 1, 0, 1, 0,
-			  0, 1, 0, 1,
-			  0, 0, 1, 0,
-			  0, 0, 0, 1;
+		0, 1, 0, 1,
+		0, 0, 1, 0,
+		0, 0, 0, 1;
   
   ekf_.P_ = MatrixXd(4, 4);
   ekf_.P_ << 1, 0, 0, 0,
-			 0, 1, 0, 0,
-			 0, 0, 1000, 0,
-			 0, 0, 0, 1000;
+		0, 1, 0, 0,
+		0, 0, 1000, 0,
+		0, 0, 0, 1000;
   
   // Noise values used from the Lectures
   noise_ax = 9;
@@ -163,7 +163,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 	//Use Covariance Matrix for laser measurements
 	ekf_.R_ = R_laser_;
 	
-	ekf_.UpdateEKF(measurement_pack.raw_measurements_);
+	ekf_.Update(measurement_pack.raw_measurements_);
 	
   }
 
